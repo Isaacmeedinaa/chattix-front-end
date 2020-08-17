@@ -1,41 +1,45 @@
 import React, { Component } from "react";
-
 import { API_ROOT, HEADERS } from "../constants/index";
 
-class NewConversationForm extends Component {
-  constructor() {
-    super();
+class NewMessageForm extends Component {
+  constructor(props) {
+    super(props);
 
     this.state = {
-      title: "",
+      text: "",
+      conversation_id: props.conversation_id,
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({ conversation_id: nextProps.conversation_id });
+  }
+
   handleChange = (event) => {
-    this.setState({ title: event.target.value });
+    this.setState({ text: event.target.value });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch(`${API_ROOT}/conversations`, {
+    fetch(`${API_ROOT}/messages`, {
       method: "POST",
       headers: HEADERS,
       body: JSON.stringify(this.state),
     });
 
-    this.setState({ title: "" });
+    this.setState({ text: "" });
   };
 
   render() {
     return (
-      <div className="newConversationForm">
+      <div className="newMessagesForm">
         <form onSubmit={this.handleSubmit}>
-          <label>New Conversation</label>
+          <label>New Message:</label>
           <br />
           <input
             type="text"
-            value={this.state.title}
+            value={this.state.text}
             onChange={this.handleChange}
           />
           <input type="submit" />
@@ -45,4 +49,4 @@ class NewConversationForm extends Component {
   }
 }
 
-export default NewConversationForm;
+export default NewMessageForm;
